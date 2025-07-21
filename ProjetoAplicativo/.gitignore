@@ -1,0 +1,75 @@
+### General/OS ###
+*.swp
+*.swo
+*.log
+*.bak
+~$*
+.DS_Store
+Thumbs.db
+
+### JetBrains Rider ###
+.idea/
+**/.idea/**
+*.iml
+modules.xml
+workspace.xml
+contentModel.xml
+projectSettingsUpdater.xml
+httpRequests/
+dataSources/
+dataSources.local.xml
+shelf/
+indexLayout.xml
+vcs.xml
+
+### Visual Studio ###
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.vsp/
+*.vc.vcproj.*.user
+
+### VS Code ###
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+### .NET Build ###
+bin/
+obj/
+*.cache
+*.pdb
+*.dll
+*.exe
+*.nupkg
+*.pubxml
+*.runtimeconfig.json
+
+### Local Configs ###
+appsettings.Development.json
+Properties/launchSettings.json
+*.http
+.env
+*.local
+secrets.json
+
+### Test/Build Artifacts ###
+TestResults/
+*.OpenCover.xml
+coverage.json
+artifacts/
+packages/
+[Nn]upkg/
+[Bb]uild/
+out/
+
+### Databases/Temp Files ###
+*.sqlite
+*.db
+*.sql
+*.temp
