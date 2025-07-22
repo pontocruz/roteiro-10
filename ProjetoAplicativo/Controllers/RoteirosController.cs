@@ -5,10 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjetoAplicativo.Data;
 using ProjetoAplicativo.Models;
+using ProjetoAplicativo.Models.DTOs;
 using static ProjetoAplicativo.Models.Enums.EnumInstrucao;
 
 namespace ProjetoAplicativo.Controllers
 {
+    [Route("api/[controller]")]
     public class RoteirosController : Controller
     {
         private readonly ModeloEntidades _context;
@@ -18,7 +20,7 @@ namespace ProjetoAplicativo.Controllers
             _context = context;
         }
 
-        [HttpGet]
+        [HttpGet("instrucoes")] 
         public async Task<IActionResult> GetInstrucoesJson(int id)
         {
             var cena = await _context.Cena
@@ -49,21 +51,20 @@ namespace ProjetoAplicativo.Controllers
 
             return Json(result);
         }
-        
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateInstrucao([FromForm] int CenaId,
-            [FromForm] TipoDeInstrucao TipoDeInstrucao, [FromForm] string? Texto,
-            [FromForm] List<int>? personagemIds = null)
-        {
-            var ordem = await GetNextOrderNumber(CenaId);
 
+
+        [HttpPost]
+        public async Task<IActionResult> CreateInstrucao(
+            [FromBody] CreateInstrucaoRequestDto request)
+        {
+            var ordem = await GetNextOrderNumber(request.CenaId);
             var (success, data, error) = await CreateInstructionCoreAsync(
-                CenaId, TipoDeInstrucao, Texto, ordem, personagemIds);
+                request.CenaId, request.TipoDeInstrucao, request.Texto, ordem, request.PersonagemIds);
+
             return Json(new { success, data, error });
         }
 
-        
+
         #region SHARED PRIVATE METHODS
 
         private async Task<(bool Success, Instrucao? Data, string Error)>
@@ -91,7 +92,7 @@ namespace ProjetoAplicativo.Controllers
                 await HandleMentionedPersonagens(instrucao.Id, mentionedIds);
 
                 var result = await LoadInstructionWithRelations(instrucao.Id);
-                return (true, result, null); 
+                return (true, result, null);
             }
             catch (Exception ex)
             {
@@ -254,5 +255,44 @@ namespace ProjetoAplicativo.Controllers
 
         #endregion MENTION
 
+
+        private InstrucaoResponseDto MapToDto(Instrucao instrucao)
+        {
+            var dto = new InstrucaoResponseDto
+            {
+                Id = instrucao.Id,
+                CenaId = instrucao.CenaId,
+                Tipo = instrucao.TipoDeInstrucao.ToString(),
+                Texto = instrucao.Texto,
+                Ordem = instrucao.OrdemCronologica
+            };
+
+            // Process Executors/Exclusions
+            foreach (var ip in instrucao.InstrucoesPersonagens
+                         .Where(ip => ip.TipoDeParticipacao == TipoDeParticipacao.Executor ||
+                                      ip.TipoDeParticipacao == TipoDeParticipacao.Exceto))
+            {
+                dto.Executores.Add(new ExecutorDto
+                {
+                    PersonagemId = ip.PersonagemId,
+                    Nome = ip.Personagem?.Nome,
+                    IsAll = ip.ShowAll,
+                    IsAllExcept = ip.ShowAllExcept
+                });
+            }
+
+            // Process Mentions
+            foreach (var ip in instrucao.InstrucoesPersonagens
+                         .Where(ip => ip.TipoDeParticipacao == TipoDeParticipacao.Citado))
+            {
+                dto.Citados.Add(new CitadoDto
+                {
+                    PersonagemId = ip.PersonagemId,
+                    Nome = ip.Personagem?.Nome
+                });
+            }
+
+            return dto;
+        }
     }
 }
