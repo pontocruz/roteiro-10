@@ -20,7 +20,7 @@ namespace ProjetoAplicativo.Controllers
             _context = context;
         }
 
-        [HttpGet("instrucoes/{id}")] // Add {id} to route
+        [HttpGet("instrucoes/{id}")]
         public async Task<IActionResult> GetInstrucoesJson(int id)
         {
             var cena = await _context.Cena
@@ -45,7 +45,7 @@ namespace ProjetoAplicativo.Controllers
                         ip.PersonagemId,
                         ip.ShowAll,
                         ip.ShowAllExcept,
-                        PersonagemNome = ip.Personagem?.Nome
+                        ip.Personagem?.Nome
                     })
                 }).ToList();
 
