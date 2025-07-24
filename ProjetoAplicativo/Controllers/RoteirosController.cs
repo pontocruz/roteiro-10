@@ -20,7 +20,7 @@ namespace ProjetoAplicativo.Controllers
             _context = context;
         }
 
-        [HttpGet("instrucoes")] 
+        [HttpGet("instrucoes/{id}")] // Add {id} to route
         public async Task<IActionResult> GetInstrucoesJson(int id)
         {
             var cena = await _context.Cena
