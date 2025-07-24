@@ -15,8 +15,8 @@ public class ExecutorDto
 {
     public int? PersonagemId { get; set; }
     public string? Nome { get; set; }
-    public bool IsAll { get; set; } // For -1
-    public bool IsAllExcept { get; set; } // For -2
+    public bool ShowAll { get; set; } // For -1
+    public bool ShowAllExcept { get; set; } // For -2
 }
 
 public class CitadoDto

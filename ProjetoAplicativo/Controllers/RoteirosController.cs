@@ -243,16 +243,7 @@ namespace ProjetoAplicativo.Controllers
             return mentions.Distinct().ToList();
         }
 
-        public static string ParseMentionsToButtons(string text)
-        {
-            if (string.IsNullOrEmpty(text))
-                return text;
-
-            return Regex.Replace(text, @"@\[(\d+)\|([^\]]+)\]",
-                match =>
-                    $"<button class='mention-btn' data-personagem-id='{match.Groups[1].Value}'>{match.Groups[2].Value}</button>");
-        }
-
+ 
         #endregion MENTION
 
 
@@ -276,8 +267,8 @@ namespace ProjetoAplicativo.Controllers
                 {
                     PersonagemId = ip.PersonagemId,
                     Nome = ip.Personagem?.Nome,
-                    IsAll = ip.ShowAll,
-                    IsAllExcept = ip.ShowAllExcept
+                    ShowAll = ip.ShowAll,
+                    ShowAllExcept = ip.ShowAllExcept
                 });
             }
 
