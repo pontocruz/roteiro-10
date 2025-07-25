@@ -1,4 +1,4 @@
-﻿//ModeloEntidades.cs
+﻿// FILE: ModeloEntidades.cs
 using Microsoft.EntityFrameworkCore;
 namespace ProjetoAplicativo.Data
 {
