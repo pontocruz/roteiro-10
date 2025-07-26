@@ -10,7 +10,7 @@ using static ProjetoAplicativo.Models.Enums.EnumInstrucao;
 
 
 namespace ProjetoAplicativo.Controllers {
-[Route("api/[controller]")]
+[Route("api/roteiros")] 
 public class RoteirosController : Controller {
    private readonly ModeloEntidades _context;
    public RoteirosController(ModeloEntidades context) { _context = context; }
@@ -33,9 +33,9 @@ public class RoteirosController : Controller {
 
       return Json(result);
    }
-   
-   
-   [HttpPost]
+
+
+   [HttpPost("instrucoes")]
    public async Task<IActionResult> CreateInstrucao([FromBody] InstrucaoDto dto)
    {
       var instrucao = dto.ToEntity();
