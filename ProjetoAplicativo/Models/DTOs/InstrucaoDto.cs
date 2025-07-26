@@ -33,7 +33,9 @@ public class InstrucaoDto
          .Select(ip => new InstrucaoPersonagemDto(ip))
          .ToList() ?? new List<InstrucaoPersonagemDto>();
    }
-        
+   private static TipoDeInstrucao ParseTipo(string tipo) 
+      => Enum.TryParse<TipoDeInstrucao>(tipo, out var result) ? result : default;
+   
    public Instrucao ToEntity()
    {
       return new Instrucao
@@ -41,7 +43,7 @@ public class InstrucaoDto
          Id = Id,
          CenaId = CenaId,
          OrdemCronologica = OrdemCronologica,
-         TipoDeInstrucao = Enum.Parse<TipoDeInstrucao>(TipoDeInstrucao),
+         TipoDeInstrucao = ParseTipo(TipoDeInstrucao), 
          Texto = Texto,
          InstrucoesPersonagens = InstrucoesPersonagens.Select(ip => ip.ToEntity()).ToList()
       };
